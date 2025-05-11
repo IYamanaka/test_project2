@@ -5,10 +5,21 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;200;300;400;500;600;700;800;900&family=Caveat&display=swap" rel="stylesheet">
     <style>
+        body {
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
+            background-color: #fffaf0;
+        }
         #calendar {
-            width: 40vw; /* 画面の幅の50% */
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
+            width: 50vw; /* 画面の幅の50% */
             margin: 0 auto; /* 水平方向中央揃え（必要であれば） */
+            background-color: white;
         }
         .fc-event {
             background-color: transparent !important; /* 背景色を透明にする */
@@ -26,49 +37,100 @@
             height: auto;
         }
         .fc-daygrid-day-number {
+            text-decoration: none !important; /* 日付の下線を消す */
+            color: #000 !important; /* 日付の色を黒にする */
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
             font-size: 0.8em; /* デフォルトの80%のサイズ */
+        }
+        .fc-col-header-cell-cushion {
+            text-decoration: none !important;
+            color: #000 !important; /* 薄いオレンジ */
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
+        }
+        h1 {
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
+        }
+        h2 {
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
+        }
+        p {
+            font-family: 'M PLUS 1p', sans-serif;
+            font-weight: 300;
+            font-size: 1.5em; /* フォントサイズを1.2emに設定 */
+        }
+        .bg-light-orange {
+            background-color: #ffe2c5 !important; /* 薄いオレンジ */
+        }
+        .habit-list-title {
+            border-bottom: 3px solid #d5d5d5; /* コーラル色の下線 */
+            padding-bottom: 5px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <h1 class="bg-info text-white p-2"><%= header %></h1>
+    <h1 class="bg-light-orange p-2"><span style="font-family: 'Caveat', cursive;">Habitting </span><span style="font-size: 20px;"> 習慣化応援</span></h1>
     <div class="container py-2">
-        <h2 class="mb-3"><%= title %></h2>
-        <div class="alert alert-info">
-            <%= message %>
-        </div>>
-        <div id="calendar"></div>
+        <h2 class="habit-list-title mb-3">山中さんの習慣一覧</h2>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var achievesFromController = <%- JSON.stringify(achieves) %>.map(item => new Date(item.achieved_at));
-            var oldachievesFromController = <%- JSON.stringify(achieves_old) %>.map(item => new Date(item.achieved_at));
-            var eventsForCalendar = [];
-            var achievedDates = new Set();
-            achievesFromController.forEach(function(item) {
-                var adjustedDate = new Date(item - 4 * 60 * 60 * 1000).toLocaleDateString('ja-JP', {year: "numeric",month: "2-digit", day: "2-digit"}).replaceAll('/', '-');
-                if (!achievedDates.has(adjustedDate)) {
-                    eventsForCalendar.push({start: adjustedDate, html: '<img src="/img/achievestamp.png">'});
-                    achievedDates.add(adjustedDate);
-                }
-            })
-            oldachievesFromController.forEach(function(item) {
-                var adjustedDate = new Date(item - 4 * 60 * 60 * 1000).toLocaleDateString('ja-JP', {year: "numeric",month: "2-digit", day: "2-digit"}).replaceAll('/', '-');
-                if (!achievedDates.has(adjustedDate)) {
-                    eventsForCalendar.push({start: adjustedDate, html: '<img src="/img/achievestamp_old.png">'});   
-                }
-            })
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: eventsForCalendar,
-                eventContent: function(arg) {
-                        return {html: arg.event.extendedProps.html}
-                },
-            });
-            calendar.render();
-        });
-    </script>
+    <div class="container py-2">
+        <h2 style="font-weight: 400;">本読み「確率論」</h2>
+        <div class="row align-items-center mb-2">
+            <div class="col-6 text-start">
+                <div class="border rounded p-2 mb-2 bg-light">
+                    <p class="mb-0">一日15分読む</p>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <p>目標達成まであと<span style="font-size:30px">15</span>日</p>
+            </div>
+        </div>
+        <div class="row align-items-center mb-2">
+            <div class="col-4 text-center">
+                <p>2025/05/01からスタート</p>
+                <p>最短で2025/05/31に達成予定</p>
+            </div>
+            <div class="col-8 text-center">
+                <div id="calendar"></div>
+                <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js" crossorigin="anonymous"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var calendarEl = document.getElementById('calendar');
+                        var achievesFromController = <%- JSON.stringify(achieves) %>.map(item => new Date(item.achieved_at));
+                        var oldachievesFromController = <%- JSON.stringify(achieves_old) %>.map(item => new Date(item.achieved_at));
+                        var eventsForCalendar = [];
+                        var achievedDates = new Set();
+                        achievesFromController.forEach(function(item) {
+                            var adjustedDate = new Date(item - 4 * 60 * 60 * 1000).toLocaleDateString('ja-JP', {year: "numeric",month: "2-digit", day: "2-digit"}).replaceAll('/', '-');
+                            if (!achievedDates.has(adjustedDate)) {
+                                eventsForCalendar.push({start: adjustedDate, html: '<img src="/img/achievestamp.png">'});
+                                achievedDates.add(adjustedDate);
+                            }
+                        })
+                        oldachievesFromController.forEach(function(item) {
+                            var adjustedDate = new Date(item - 4 * 60 * 60 * 1000).toLocaleDateString('ja-JP', {year: "numeric",month: "2-digit", day: "2-digit"}).replaceAll('/', '-');
+                            if (!achievedDates.has(adjustedDate)) {
+                                eventsForCalendar.push({start: adjustedDate, html: '<img src="/img/achievestamp_old.png">'});   
+                            }
+                        })
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            locale: 'ja',
+                            aspectRatio: 2.0,
+                            events: eventsForCalendar,
+                            eventContent: function(arg) {
+                                    return {html: arg.event.extendedProps.html}
+                            },
+                        });
+                        calendar.render();
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
