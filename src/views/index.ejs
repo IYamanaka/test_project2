@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" crossorigin="anonymous">
+    <style>
+        .fc-event-title-container {
+            font-size: 1.5em; /* 文字サイズを大きく */
+            display: flex;
+            justify-content: center; /* 水平方向中央揃え */
+            align-items: center; /* 垂直方向中央揃え */
+            height: 100%; /* マスの高さいっぱいにする */
+            white-space: normal !important; /* 長いタイトルを折り返す */
+            color: blueviolet
+        }
+        .fc-event {
+            background-color: transparent !important; /* 背景色を透明にする */
+            border: none !important; /* 枠線をなくす */
+        }
+    </style>
+</head>
+<body>
+    <h1 class="bg-info text-white p-2"><%= header %></h1>
+    <div class="container py-2">
+        <h2 class="mb-3"><%= title %></h2>
+        <div class="alert alert-info">
+            <%= message %>
+        </div>>
+        <div id="calendar"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth', // 最初に表示するビュー
+                events: [
+                    {
+                        title: '達成🎉',
+                        start: new Date(Date.now() - 4 * 60 * 60 * 1000).toLocaleDateString('ja-JP', {year: "numeric",month: "2-digit", day: "2-digit"}).replaceAll('/', '-')
+                    }
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
